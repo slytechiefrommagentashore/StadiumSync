@@ -11,7 +11,7 @@ COPY frontend/ .
 RUN npm run build
 
 # Build Stage 2: Express Backend Server
-FROM node:18-alpine
+FROM node:22-alpine
 WORKDIR /app
 
 # Install backend dependencies
