@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const xss = require('xss');
 const multer = require('multer');
+const path = require('path');
 
 // Configure Multer for zero-retention in-memory buffering
 const upload = multer({
@@ -151,7 +152,15 @@ io.on('connection', (socket) => {
     });
 });
 
-const PORT = process.env.PORT || 3001;
+// Serve frontend static files from 'public'
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Catch-all route to serve React Router history paths
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
   console.log(`StadiumSync Backend Server running on port ${PORT}`);
 });
