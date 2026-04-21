@@ -1,5 +1,5 @@
 # Build Stage 1: Build the Vite React Frontend
-FROM node:18-alpine AS frontend-builder
+FROM node:22-alpine AS frontend-builder
 WORKDIR /app/frontend
 
 # Copy package descriptors and install dependencies
