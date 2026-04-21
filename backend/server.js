@@ -70,7 +70,7 @@ const generateDensityData = () => {
     };
 };
 
-// Start broadcasting when a client connects, or maybe just broadcast universally.
+// Start broadcasting when a client connects
 setInterval(() => {
     io.emit('density_update', generateDensityData());
 }, 5000);
@@ -98,14 +98,12 @@ io.on('connection', (socket) => {
     });
 
     socket.on('rally_ping', (data) => {
-        // payload should contain { squadCode: '1A2B3C', waypoint: 'P-12' }
         if (data && data.squadCode && data.waypoint) {
             const cleanSquadCode = xss(data.squadCode);
             const cleanWaypoint = xss(data.waypoint);
             
             console.log(`Rally Ping from ${socket.id} in squad ${cleanSquadCode} at ${cleanWaypoint}`);
             
-            // Broadcast strictly to others in the same room
             socket.to(cleanSquadCode).emit('rally_ping_received', {
                 sender: socket.id,
                 waypoint: cleanWaypoint,
@@ -123,7 +121,6 @@ io.on('connection', (socket) => {
 
     // ADMIN & FAN INCIDENT FLOW
     socket.on('join_admin_room', (adminPin) => {
-        // Mock authorization: PIN is 1234
         if (adminPin === "1234") {
             socket.join('admin_room');
             console.log(`Socket ${socket.id} securely joined admin_room`);
@@ -131,9 +128,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('incident_report', (payload) => {
-        // Payload from fan containing category, description, ticketData, waypoint
         console.log(`Incident reported: ${payload.category} at ${payload.waypoint || 'Unknown Waypoint'}`);
-        // Relay strictly to admins
         io.to('admin_room').emit('new_incident_report', {
             ...payload,
             timestamp: new Date().toISOString(),
@@ -143,7 +138,6 @@ io.on('connection', (socket) => {
 
     socket.on('admin_evacuate', () => {
         console.log(`ADMINISTRATIVE EVACUATION TRIGGERED BY ${socket.id}!`);
-        // Broadcast to universally ALL connected clients
         io.emit('EVACUATION_SIGNAL', { critical: true });
     });
 

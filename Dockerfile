@@ -18,6 +18,9 @@ WORKDIR /app
 COPY backend/package*.json ./
 RUN npm install --production
 
+# FORCE INSTALL ALL REQUIRED PACKAGES TO PREVENT CRASH
+RUN npm install express socket.io helmet cors xss multer
+
 # Copy backend source code
 COPY backend/ .
 
