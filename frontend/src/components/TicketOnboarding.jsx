@@ -23,7 +23,7 @@ export default function TicketOnboarding({ onTicketParsed }) {
             const formData = new FormData();
             formData.append('ticketImage', file);
 
-            const response = await fetch('http://localhost:3001/api/scan-ticket', {
+            const response = await fetch('/api/scan-ticket', {
                 method: 'POST',
                 body: formData
             });

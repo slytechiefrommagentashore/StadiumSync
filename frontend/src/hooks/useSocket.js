@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
 // Initializing the socket connection outside the component
-const socket = io('http://localhost:3001');
+const socket = io();
 
 export const useSocket = () => {
     const [densityData, setDensityData] = useState({ gates: [], concessions: [] });
